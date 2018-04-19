@@ -153,17 +153,17 @@
                         
                         
                           <span class="meta">
-                               <span class="meta-item">博主: lnsdlhfem</span>
-                               <span class="meta-item">创建于: 2018-04-18</span>
+                               <span class="meta-item">Author: lnsdlhfem</span>
+                               <span class="meta-item">Date: 2018-04-18</span>
                                
-                                 <span class="meta-item">更新于: 2018-04-18</span>
+                                 <span class="meta-item">Updated On: 2018-04-19</span>
                                
                           </span>
                           <div class="tags text-center">
-                              分类: 
+                              Categories: 
                           </div>
                           <div class="tags text-center">
-                              标签: 
+                              Tags: 
                               <a class="tag" href="/tags/#spark"
                                  title="spark">spark</a>
                               
@@ -190,7 +190,7 @@
 </div><hr>
           
           
-          <h1 id="高性能Spark读书笔记"><a href="#高性能Spark读书笔记" class="headerlink" title="高性能Spark读书笔记"></a>高性能Spark读书笔记</h1><h2 id="2-Spark是怎么工作的"><a href="#2-Spark是怎么工作的" class="headerlink" title="2. Spark是怎么工作的"></a>2. Spark是怎么工作的</h2><h3 id="Spark并行计算模型"><a href="#Spark并行计算模型" class="headerlink" title="Spark并行计算模型"></a>Spark并行计算模型</h3><h4 id="Lazy-Evaluation"><a href="#Lazy-Evaluation" class="headerlink" title="Lazy Evaluation"></a>Lazy Evaluation</h4><p><code>RDD</code>由分区组成。</p>
+          <h1 id="高性能Spark读书笔记"><a href="#高性能Spark读书笔记" class="headerlink" title="高性能Spark读书笔记"></a>高性能Spark读书笔记</h1><h2 id="Spark是怎么工作的"><a href="#Spark是怎么工作的" class="headerlink" title="Spark是怎么工作的"></a>Spark是怎么工作的</h2><h3 id="Spark并行计算模型"><a href="#Spark并行计算模型" class="headerlink" title="Spark并行计算模型"></a>Spark并行计算模型</h3><h4 id="Lazy-Evaluation"><a href="#Lazy-Evaluation" class="headerlink" title="Lazy Evaluation"></a>Lazy Evaluation</h4><p><code>RDD</code>由分区组成。</p>
 <p>Spark的<code>Action</code>操作会返回<code>RDD</code>之外的对象，触发对<code>RDD</code>分区的计算，可能产生一些非Spark系统的输出。<code>Transformation</code>操作返回的对象还是<code>RDD</code>。</p>
 <p>Spark在<code>Action</code>操作被调用时才会真正开始计算<code>RDD</code>分区。<code>Action</code>操作会触发构建<code>DAG</code>的<code>Scheduler</code>。</p>
 <p>换句话说，Spark在执行<code>Action</code>操作之前，会先定义一系列步骤，称为执行计划。执行计划需要在最终分布式数据集（每个分区）生成每个对象，然后，<code>Scheduler</code>为每个<code>Stage</code>计算缺失的分区，直到计算出最终结果。（对这段话的原文还是一直半解）</p>
@@ -210,7 +210,16 @@
 <li>preferredLocations(p)：返回分区的位置信息。</li>
 </ul>
 <p><br></p>
-<h4 id="Transformations-vs-Actions"><a href="#Transformations-vs-Actions" class="headerlink" title="Transformations vs Actions"></a>Transformations vs Actions</h4>
+<h4 id="Transformations-vs-Actions"><a href="#Transformations-vs-Actions" class="headerlink" title="Transformations vs Actions"></a>Transformations vs Actions</h4><p>对于<code>RDD</code>有两种函数：<code>transformations</code>和<code>actions</code>。前者返回的另一个<code>RDD</code>，后者返回一个非<code>RDD</code>对象。</p>
+<p>每个Spark程序都必须包含一个<code>action</code>，其结果信息返回给<code>driver</code>或写入数据库。</p>
+<p><br></p>
+<h4 id="宽依赖与窄依赖"><a href="#宽依赖与窄依赖" class="headerlink" title="宽依赖与窄依赖"></a>宽依赖与窄依赖</h4><p><code>transformations</code>分为两类：宽依赖（多对多）与窄依赖（一对一或多对一）。二者的区分主要在于计算时是否考虑分区之间的关系。</p>
+<p><br></p>
+<h3 id="Job调度"><a href="#Job调度" class="headerlink" title="Job调度"></a>Job调度</h3><p>一个Spark应用由一个<code>driver</code>和一系列的<code>executor</code>组成。前者由高级语言编写逻辑，后者分散在集群的每个节点上。</p>
+<h3 id="Job剖析"><a href="#Job剖析" class="headerlink" title="Job剖析"></a>Job剖析</h3><p><code>Job</code>是Spark执行结构的最高对象，对应一个<code>action</code>，每个<code>action</code>由<code>driver</code>调用产生。</p>
+<p>一个<code>Job</code>中的多个<code>Stage</code>通常是序列执行而非并行执行的，<code>Stage</code>的区分一般与<code>shuffle</code>操作有关。</p>
+<p>一个<code>Stage</code>中的多个<code>Task</code>执行相同的代码，处理不同的数据。每个<code>Stage</code>的<code>Task</code>数目对应其输出<code>RDD</code>的分区数目。</p>
+
           
           <hr>
           <ul class="pager">
@@ -218,7 +227,7 @@
               
               <li class="next">
                   <a href="/数据密集型应用/" data-toggle="tooltip" data-placement="top"
-                     title="数据密集型应用">下一篇&rarr;</a>
+                     title="数据密集型应用">Next Post&rarr;</a>
               </li>
               
           </ul>
@@ -253,9 +262,9 @@
         
   <div class="hidden-xs col-sm-3 toc-col">
     <div class="toc-wrap">
-        目录
+        Table of Contents
         
-          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#高性能Spark读书笔记"><span class="toc-number">1.</span> <span class="toc-text">高性能Spark读书笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Spark是怎么工作的"><span class="toc-number">1.1.</span> <span class="toc-text">2. Spark是怎么工作的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spark并行计算模型"><span class="toc-number">1.1.1.</span> <span class="toc-text">Spark并行计算模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Lazy-Evaluation"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">Lazy Evaluation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内存持久和存储管理"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">内存持久和存储管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Transformations-vs-Actions"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">Transformations vs Actions</span></a></li></ol></li></ol></li></ol></li></ol>
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#高性能Spark读书笔记"><span class="toc-number">1.</span> <span class="toc-text">高性能Spark读书笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spark是怎么工作的"><span class="toc-number">1.1.</span> <span class="toc-text">Spark是怎么工作的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spark并行计算模型"><span class="toc-number">1.1.1.</span> <span class="toc-text">Spark并行计算模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Lazy-Evaluation"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">Lazy Evaluation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内存持久和存储管理"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">内存持久和存储管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Transformations-vs-Actions"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">Transformations vs Actions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#宽依赖与窄依赖"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">宽依赖与窄依赖</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Job调度"><span class="toc-number">1.1.2.</span> <span class="toc-text">Job调度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Job剖析"><span class="toc-number">1.1.3.</span> <span class="toc-text">Job剖析</span></a></li></ol></li></ol></li></ol>
         
     </div>
   </div>
@@ -314,13 +323,13 @@
             lnsdlhfem
         <br>
           
-              由 <a target="_blank" href="https://hexo.io">Hexo</a> 强力驱动
+              Powered by <a target="_blank" href="https://hexo.io">Hexo</a>
           
           
             |
           
           
-              主题 - <a href="https://github.com/huyingjie/hexo-theme-A-RSnippet" target="_blank">A-RSnippet</a> v0.1.0
+              Theme - <a href="https://github.com/huyingjie/hexo-theme-A-RSnippet" target="_blank">A-RSnippet</a> v0.1.0
           
           
       </div>
